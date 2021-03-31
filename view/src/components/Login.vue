@@ -1,24 +1,27 @@
 <template>
     <div>
-        <form @submit.prevent="loginBtn"
-              class="mb-3">
-            <div class="form-group">
-                <label for="username">帳號：</label>
-                <input v-model="body.username"
-                       type="text"
-                       class="form-control"
-                       id="username">
-            </div>
-            <div class="form-group">
-                <label for="password">密碼：</label>
-                <input v-model="body.password"
-                       type="text"
-                       class="form-control"
-                       id="password">
-            </div>
-            <button type="submit"
-                    class="btn btn-primary">登入</button>
-        </form>
+        <div class="form-group">
+            <label for="username">帳號：</label>
+            <input v-model="body.username"
+                   type="text"
+                   class="form-control"
+                   id="username">
+        </div>
+        <div class="form-group">
+            <label for="password">密碼：</label>
+            <input v-model="body.password"
+                   type="text"
+                   class="form-control"
+                   id="password">
+        </div>
+        <button class="btn btn-primary"
+                @click="loginBtn">
+            登入
+        </button>
+        <button class="btn btn-primary"
+                @click="createBtn">
+            創建
+        </button>
     </div>
 </template>
 
@@ -35,40 +38,50 @@ export default {
     }),
     mounted() {},
     methods: {
-        loginBtn() {
+        async loginBtn() {
             const vm = this;
-            console.log(vm.body);
-            fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify(vm.body),
-                headers: {
-                    "content-type": "application/json",
-                },
-            })
-                .then((response) => response.json())
-                .then((result) => {
-                    if (
-                        result.username === vm.body.username &&
-                        result.password === vm.body.password
-                    ) {
-                        vm.$router.push({
-                            path: "/ques-paper",
-                            params: { username: result.username },
-                        });
-                    }
-
-                    if (result.details) {
-                        const error = result.details
-                            .map((detail) => detail.message)
-                            .join(". ");
-                        vm.error = error;
-                    } else {
-                        vm.error = "";
-                    }
+            await vm.loginJudgment(vm.body);
+        },
+        async loginJudgment(obj) {
+            const vm = this;
+            if (obj.username === "" && obj.password === "") {
+                return;
+            } else {
+                fetch(API_URL, {
+                    method: "POST",
+                    body: JSON.stringify(vm.body),
+                    headers: {
+                        "content-type": "application/json",
+                    },
                 })
-                .catch((err) => {
-                    console.log(err);
-                });
+                    .then((response) => response.json())
+                    .then((result) => {
+                        if (
+                            result.username === vm.body.username &&
+                            result.password === vm.body.password
+                        ) {
+                            vm.$router.push({
+                                path: "/ques-paper",
+                                params: { username: result.username },
+                            });
+                        }
+                        if (result.details) {
+                            const error = result.details
+                                .map((detail) => detail.message)
+                                .join(". ");
+                            vm.error = error;
+                        } else {
+                            vm.error = "";
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        },
+        createBtn() {
+            const vm = this;
+            vm.$router.push({ path: "/create-account" });
         },
     },
 };

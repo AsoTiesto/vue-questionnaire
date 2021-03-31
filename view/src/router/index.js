@@ -26,6 +26,13 @@ const router = new VueRouter({
                 Login: (resolve) => require(["@/components/Login"], resolve),
             },
         },
+        {
+            name: "CreateAccount",
+            path: "/create-account",
+            components: {
+                Login: (resolve) => require(["@/components/CreateAccount"], resolve),
+            },
+        },
     ],
 });
 

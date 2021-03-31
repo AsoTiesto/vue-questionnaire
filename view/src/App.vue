@@ -1,20 +1,15 @@
 <template>
     <div id="app">
-        <!-- <QuesPaper msg="Welcome to Your question" /> -->
         <router-view name="Login"></router-view>
         <router-view name="QuesPaper"></router-view>
         <router-view name="QuesAnswer"></router-view>
+        <router-view name="CreateAccount"></router-view>
     </div>
 </template>
 
 <script>
-// import QuesPaper from "./components/QuesPaper";
-
 export default {
     name: "App",
-    // components: {
-    //     QuesPaper,
-    // },
 };
 </script>
 
