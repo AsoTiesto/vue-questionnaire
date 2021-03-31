@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 const messages = require("./db/messages");
+const users = require("./db/users");
 
 const app = express();
 
@@ -18,14 +19,14 @@ app.get("/", (req, res) => {
 });
 
 app.post("/getUsers", (req, res) => {
-    messages.getAllUsers(req.body).then((messages) => {
+    users.getAllUsers(req.body).then((messages) => {
         res.json(messages);
     });
 });
 
 app.post("/createUser", (req, res) => {
     console.log(req.body);
-    messages
+    users
         .create(req.body)
         .then((message) => {
             res.json(message);

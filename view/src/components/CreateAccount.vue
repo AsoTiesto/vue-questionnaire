@@ -22,7 +22,7 @@
 </template>
 
 <script>
-// const API_URL = "http://localhost:4000/createUser";
+const API_URL = "http://localhost:4000/createUser";
 
 export default {
     name: "CreateAccount",
@@ -34,8 +34,30 @@ export default {
     }),
     mounted() {},
     methods: {
-        createAccount() {
-            console.log(123);
+        async createAccount() {
+            const vm = this;
+            await vm.createJudgment();
+        },
+        async createJudgment() {
+            const vm = this;
+            if (vm.body.username === "" && vm.body.password === "") {
+                return;
+            } else {
+                fetch(API_URL, {
+                    method: "POST",
+                    body: JSON.stringify(vm.body),
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(result);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
         },
     },
 };
